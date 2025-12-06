@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Any
 from pydantic import AnyHttpUrl, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     DATABASE_URI: Union[str, None] = None
 
     @validator("DATABASE_URI", pre=True)
-    def assemble_db_connection(cls, v: Union[str, None], values: dict[str, any]) -> str:
+    def assemble_db_connection(cls, v: Union[str, None], values: dict[str, Any]) -> str:
         if isinstance(v, str):
             return v
         return f"postgresql+asyncpg://{values.get('POSTGRES_USER')}:{values.get('POSTGRES_PASSWORD')}@{values.get('POSTGRES_SERVER')}:{values.get('POSTGRES_PORT')}/{values.get('POSTGRES_DB')}"
